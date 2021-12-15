@@ -55,6 +55,22 @@ public class IOUtils {
         return doubleInput;
     }
 
+    public String readString() {
+        String stringInput = "";
+        boolean isInvalid = true;
+        while (isInvalid) {
+            try {
+                stringInput = scanner.nextLine();
+                isInvalid = false;
+            } catch (Exception e) {
+                System.out.println("Wrong input format!");
+                scanner.nextLine();
+                System.out.println("Re-enter input:");
+            }
+        }
+        return stringInput;
+    }
+
     public String askForCustomerName(){
         System.out.print("Customer name: ");
         return scanner.nextLine();

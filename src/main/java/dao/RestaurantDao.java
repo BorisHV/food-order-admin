@@ -10,7 +10,7 @@ public interface RestaurantDao {
     Restaurant createRestaurant();
     void addRestaurant(Restaurant restaurant);
     void removeRestaurant(Restaurant restaurant);
-    void updateAdress();
+    void updateAdressById();
 }
     //@Id
     //    @GeneratedValue

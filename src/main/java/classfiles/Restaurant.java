@@ -8,9 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-/**
- * @author boris
- */
+
 @Entity
 public class Restaurant {
 
@@ -25,6 +23,19 @@ public class Restaurant {
     private String category;
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> dishes;
+
+    public void restaurantMenu(){
+
+        int choice = readInt();
+
+        switch(choice){
+
+            case 1 -> System.out.println("Show all restaurants: ");
+            case 2 -> System.out.println("Create a new restaurant: ");
+            case 4 -> System.out.println("Update adress of a restaurant: ");
+            case 5 -> System.out.println("Remove a restaurant: ");
+        }
+    }
 
     public Long getId() {
         return id;
