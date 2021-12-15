@@ -2,6 +2,7 @@ package management;
 
 import classfiles.Restaurant;
 import dao.RestaurantDao;
+import instance.ApplicationContext;
 import instance.CreateInstance;
 import io.IOUtils;
 
@@ -10,14 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RestaurantManagement implements RestaurantDao {
-    EntityManagerFactory emf;
-    IOUtils ioUtils;
+    EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
+    IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
     Scanner scanner = new Scanner(System.in);
-
-    public RestaurantManagement(EntityManagerFactory emf, IOUtils ioUtils) {
-        this.emf = emf;
-        this.ioUtils = ioUtils;
-    }
 
     public List<Restaurant> showAllRestaurants() {
         EntityManager em = emf.createEntityManager();

@@ -5,11 +5,15 @@ import io.IOUtils;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class CreateInstance {
+public  class CreateInstance {
+    private final static IOUtils IOUTILS = new IOUtils();
+    private final static EntityManagerFactory EMF = Persistence.createEntityManagerFactory("PU");
 
+    public static IOUtils getIoUtils() {
+        return IOUTILS;
+    }
 
-    public CreateInstance() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
-        IOUtils ioUtils = new IOUtils();
+    public static EntityManagerFactory getEmf() {
+        return EMF;
     }
 }
