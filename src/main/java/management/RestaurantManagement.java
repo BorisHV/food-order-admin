@@ -2,52 +2,49 @@ package management;
 
 import classfiles.Restaurant;
 import dao.RestaurantDao;
+import instance.CreateInstance;
+import io.IOUtils;
 
 import javax.persistence.*;
 import java.util.List;
-
-//@Id
-//@GeneratedValue
-//private Long id;
-//@Basic
-//private String restaurantName;
-//@Basic
-//private String adress;
-//@Basic
-//private String category;
-//@OneToMany(mappedBy = "restaurant")
-//private List<Dish> dishes;
+import java.util.Scanner;
 
 public class RestaurantManagement implements RestaurantDao {
+    EntityManagerFactory emf;
+    IOUtils ioUtils;
+    Scanner scanner = new Scanner(System.in);
 
+    public RestaurantManagement(EntityManagerFactory emf, IOUtils ioUtils) {
+        this.emf = emf;
+        this.ioUtils = ioUtils;
+    }
 
     public List<Restaurant> showAllRestaurants() {
-
         EntityManager em = emf.createEntityManager();
 
-        TypedQuery<Restaurant> q = em.createQuery("SELECT r FROM Restaurant r", Restaurant.class);
-        List<Restaurant> restaurantList = q.getResultList();
-        return restaurantList;
+        TypedQuery<Restaurant> query = em.createNamedQuery("Restaurant.showAllRestaurants", Restaurant.class);
         em.close();
+        return query.getResultList();
     }
 
     public Restaurant createRestaurant() {
-
         EntityManager em = emf.createEntityManager();
 
-        Restaurant r = new Restaurant();
-        System.out.println("Name of restaurant: ");
-        r.setRestaurantName(readString());
-        System.out.println("Adress of restaurant: ");
-        r.setAdress(readString());
-        System.out.println("Category of restaurant: ");
-        r.setCategory(readString());
+        Restaurant restaurant = new Restaurant();
+        ioUtils.askForName();
+        restaurant.setRestaurantName(ioUtils.readString());
+        ioUtils.askForAddress();
+        restaurant.setAdress(ioUtils.readString());
+        ioUtils.askForCategory();
+
+        restaurant.setCategory(ioUtils.readString());
+
         em.getTransaction().begin();
-        em.persist(r);
+        em.persist(restaurant);
         em.getTransaction().commit();
         em.close();
 
-        return r;
+        return restaurant;
     }
 
     public void addRestaurant(Restaurant restaurant) {
@@ -55,24 +52,22 @@ public class RestaurantManagement implements RestaurantDao {
     }
 
     public void removeRestaurant(Restaurant restaurant) {
-
         EntityManager em = emf.createEntityManager();
 
-        System.out.println("ID of restaurant to remove: ");
-        Restaurant r = em.find(readInt());
-        em.remove(em.find(readInt()));
-        System.out.println("Restaurant with id " + readint() + " and name " + r.getRestaurantName() + " has been removed");
+        int restaurantId = ioUtils.askForId();
+        Restaurant restaurant2 = em.find(Restaurant.class, restaurantId);
+        em.remove(em.find(Restaurant.class, restaurantId));
+        System.out.println("Restaurant with id " + restaurantId + " and name " + restaurant.getRestaurantName() + " has been removed");
     }
 
     public void updateAdressById() {
-
         EntityManager em = emf.createEntityManager();
 
-        System.out.println("ID of restaurant you want to change adress on: ");
-        Restaurant r = em.find(readInt());
-        System.out.println("New adress: ");
+        int restaurantId = ioUtils.askForId();
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
+        String adress = ioUtils.askForAddress();
         em.getTransaction().begin();
-        r.setAdress(readString());
+        restaurant.setAdress(adress);
         em.getTransaction().commit();
         em.close();
     }

@@ -1,35 +1,42 @@
 package classfiles;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+@NamedQueries(
+        {
+                @NamedQuery(name = "Courier.showAllCouriers", query = "SELECT c FROM Courier c")
+        }
+)
 
 @Entity
 public class Courier {
-
     @Id
     @GeneratedValue
-    private Long id;
-    @Basic
+    private int employeeId;
+
     private String courierName;
-    @Basic
     private String deliveryType;
-    @Basic
-    private String wage;
-    @OneToMany(mappedBy = "courier")
+    private double wage;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "courier")
     private List<Order> orders;
 
-    public Long getId() {
-        return id;
+    public Courier() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Courier(String courierName, String deliveryType, double wage) {
+        this.courierName = courierName;
+        this.deliveryType = deliveryType;
+        this.wage = wage;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
     public String getCourierName() {
@@ -48,33 +55,19 @@ public class Courier {
         this.deliveryType = deliveryType;
     }
 
-    public String getWage() {
+    public double getWage() {
         return wage;
     }
 
-    public void setWage(String wage) {
+    public void setWage(double wage) {
         this.wage = wage;
     }
 
-    public List<Order> getFoodOrders() {
-        if (orders == null) {
-            orders = new ArrayList<>();
-        }
+    public List<Order> getOrders() {
         return orders;
     }
 
-    public void setFoodOrders(List<Order> orders) {
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-
-    public void addFoodOrder(Order order) {
-        getFoodOrders().add(order);
-        order.setCourier(this);
-    }
-
-    public void removeFoodOrder(Order order) {
-        getFoodOrders().remove(order);
-        order.setCourier(null);
-    }
-
 }

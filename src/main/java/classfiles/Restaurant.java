@@ -2,46 +2,33 @@ package classfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
-
+@NamedQueries(
+        {
+                @NamedQuery(name = "Restaurant.showAllRestaurants", query = "SELECT r FROM Restaurant r")
+        }
+)
 @Entity
 public class Restaurant {
 
     @Id
     @GeneratedValue
-    private Long id;
-    @Basic
+    private int id;
+
     private String restaurantName;
-    @Basic
     private String adress;
-    @Basic
     private String category;
-    @OneToMany(mappedBy = "restaurant")
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "restaurant")
     private List<Dish> dishes;
 
-    public void restaurantMenu(){
 
-        int choice = readInt();
-
-        switch(choice){
-
-            case 1 -> System.out.println("Show all restaurants: ");
-            case 2 -> System.out.println("Create a new restaurant: ");
-            case 4 -> System.out.println("Update adress of a restaurant: ");
-            case 5 -> System.out.println("Remove a restaurant: ");
-        }
-    }
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

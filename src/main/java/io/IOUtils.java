@@ -8,7 +8,7 @@ public class IOUtils {
 
 //    public int printMainMenu() {
 //        //    1. customerMenu
-//        //    2. restaurantMenu
+//        //    2. runRestaurantMenu
 //        //    3. courierMenu
 //    }
 //
@@ -39,7 +39,7 @@ public class IOUtils {
     }
 
     public double readDouble() {
-        double doubleInput = 0;
+        double doubleInput = 0.0;
         boolean isInvalid = true;
         while (isInvalid) {
             try {
@@ -86,18 +86,18 @@ public class IOUtils {
         return scanner.nextLine();
     }
 
-    public int askForCustomerId(){
-        System.out.print("Customer ID: ");
+    public int askForId(){
+        System.out.print("ID: ");
         return readInt();
     }
 
-    public String askForRestaurantName(){
-        System.out.print("classfiles.Restaurant name: ");
+    public String askForName(){
+        System.out.print("Name: ");
         return scanner.nextLine();
     }
 
-    public String askForRestaurantAddress(){
-        System.out.print("classfiles.Restaurant address: ");
+    public String askForAddress(){
+        System.out.print("Address: ");
         return scanner.nextLine();
     }
 
@@ -106,23 +106,19 @@ public class IOUtils {
         return scanner.nextLine();
     }
 
-    public int askForRestaurantId(){
-        System.out.print("classfiles.Restaurant ID: ");
-        return readInt();
-    }
-
-    public String askForCourierName(){
-        System.out.print("Courier name: ");
-        return scanner.nextLine();
-    }
-
     public double askForWage(){
         System.out.print("Wage: ");
         return readDouble();
     }
 
-    public int askForEmployeeId(){
-        System.out.print("Employee ID: ");
-        return readInt();
+    public double askForPrice() {
+        System.out.print("Wage: ");
+        return readDouble();
     }
+
+    public String askForDeliveryType(){
+        System.out.print("Delivery type: ");
+        return scanner.nextLine();
+    }
+
 }

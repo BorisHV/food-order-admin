@@ -1,53 +1,65 @@
 package management;
 
 import java.util.List;
+import classfiles.Dish;
+import dao.DishDao;
+import io.IOUtils;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
-public class DishManagement {
 
-    static EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
+public class DishManagement implements DishDao {
+    EntityManagerFactory emf;
+    IOUtils ioUtils;
+    public DishManagement(EntityManagerFactory emf, IOUtils utils) {
+        this.emf = emf;
+        this.ioUtils = utils;
+    }
 
-    public void addADish(Dish dish) {
+    @Override
+    public Dish createDish() {
+        String name = ioUtils.askForName();
+        double price = ioUtils.askForPrice();
+        Dish dish = new Dish(name, price);
+        return dish;
+    }
+    public void addDish(Dish dish) {
         EntityManager em = emf.createEntityManager();
-
         em.getTransaction().begin();
         em.persist(dish);
         em.getTransaction().commit();
-
         em.close();
     }
-
+    @Override
     public List<Dish> showAllDishes() {
         EntityManager em = emf.createEntityManager();
-
         List<Dish> allDishes = em.createQuery("SELECT dish FROM Dish dish", Dish.class)
                 .getResultList();
-
         em.close();
-
         return allDishes;
     }
-
-    public void updatePrice(int id, int newPrice) {
+    @Override
+    public void updatePrice() {
+        int id = ioUtils.askForId();
+        double newPrice = ioUtils.askForPrice();
         EntityManager em = emf.createEntityManager();
-
         Dish dish = em.find(Dish.class, id);
-
         em.getTransaction().begin();
         dish.setPrice(newPrice);
         em.getTransaction().commit();
-
         em.close();
     }
+    @Override
+    public void removeDish() {
+        int id = ioUtils.askForId();
 
-    public void removeDish(Dish dish) {
         EntityManager em = emf.createEntityManager();
 
-        //TODO remove from lists
-
+        Dish dish = em.find(Dish.class, id);
+        //TODO remove from lists, restaurant dishes, order dishes
         em.getTransaction().begin();
         em.remove(dish);
         em.getTransaction().commit();
-
         em.close();
     }
 }

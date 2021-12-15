@@ -2,12 +2,7 @@ package classfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 
 @Entity
@@ -15,21 +10,29 @@ public class Dish {
 
     @Id
     @GeneratedValue
-    private Long id;
-    @Basic
+    private int id;
     private String name;
-    @Basic
-    private String price;
-    @ManyToOne
+    private double price;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Restaurant restaurant;
-    @ManyToMany
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Order> orders;
 
-    public Long getId() {
+    public Dish() {
+    }
+
+    public Dish(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,11 +44,11 @@ public class Dish {
         this.name = name;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
