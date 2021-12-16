@@ -12,14 +12,14 @@ public class RunMenu {
     EntityManagerFactory emf;
     IOUtils ioUtils = new IOUtils();
 
-    CourierManagement courierManagement = new CourierManagement(emf, ioUtils);
-    DishManagement dishManagement = new DishManagement(emf, ioUtils);
-    RestaurantManagement restaurantManagement = new RestaurantManagement(emf, ioUtils);
+    CourierManagement courierManagement = new CourierManagement();
+    DishManagement dishManagement = new DishManagement();
+    RestaurantManagement restaurantManagement = new RestaurantManagement();
 
 
     public void runCourierMenu(int menuOption) {
         switch (menuOption) {
-            case 1 -> courierManagement.showAllCouriers();
+            case 1 -> courierManagement.getAllCouriers();
             case 2 -> courierManagement.addCourier(courierManagement.createCourier());
             case 3 -> courierManagement.deleteCourier();
             case 4 -> courierManagement.updateCourierWage();

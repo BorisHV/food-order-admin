@@ -1,5 +1,10 @@
 package io;
 
+import applicationContext.ApplicationContext;
+import applicationContext.ApplicationManagers;
+import main.MainProgram;
+import management.DishManagement;
+
 import java.util.Scanner;
 
 public class IOUtils {
@@ -71,54 +76,103 @@ public class IOUtils {
         return stringInput;
     }
 
-    public String askForCustomerName(){
+    public String askForCustomerName() {
         System.out.print("Customer name: ");
         return scanner.nextLine();
     }
 
-    public String askForCustomerAddress(){
+    public String askForCustomerAddress() {
         System.out.print("Customer address: ");
         return scanner.nextLine();
     }
 
-    public String askForCustomerTelephoneNumber(){
+    public String askForCustomerTelephoneNumber() {
         System.out.print("Telephone number: ");
         return scanner.nextLine();
     }
 
-    public int askForId(){
+    public int askForId() {
         System.out.print("ID: ");
         return readInt();
     }
 
-    public String askForName(){
+    public int askForRestaurantId() {
+        System.out.print("Restaurant ID: ");
+        return readInt();
+    }
+
+    public int askForDishId() {
+        System.out.print("Dish ID: ");
+        return readInt();
+    }
+
+    public String askForName() {
         System.out.print("Name: ");
         return scanner.nextLine();
     }
 
-    public String askForAddress(){
+    public String askForAddress() {
         System.out.print("Address: ");
         return scanner.nextLine();
     }
 
-    public String askForCategory(){
+    public String askForCategory() {
         System.out.print("Category: ");
         return scanner.nextLine();
     }
 
-    public double askForWage(){
+    public double askForWage() {
         System.out.print("Wage: ");
         return readDouble();
     }
 
     public double askForPrice() {
-        System.out.print("Wage: ");
+        System.out.print("Price: ");
         return readDouble();
     }
 
-    public String askForDeliveryType(){
+    public String askForDeliveryType() {
         System.out.print("Delivery type: ");
         return scanner.nextLine();
     }
 
+    public double askForTip() {
+        System.out.print("Tip: ");
+        return readDouble();
+    }
+
+    public void printAllDishes() {
+
+        ApplicationManagers.getInstance().getDishManagement().showAllDishes()
+                .stream()
+                .forEach(System.out::println);
+    }
+
+    public void printAllRestaurants() {
+
+        ApplicationManagers.getInstance().getRestaurantManagement().showAllRestaurants()
+                .stream()
+                .forEach(System.out::println);
+    }
+
+    public void printAllCouriers() {
+
+        ApplicationManagers.getInstance().getCourierManagement().getAllCouriers()
+                .stream()
+                .forEach(System.out::println);
+    }
+
+    public void printAllCustomers() {
+
+        ApplicationManagers.getInstance().getCustomerManagement().showAllCustomers()
+                .stream()
+                .forEach(System.out::println);
+    }
+
+    public void printAllOrders() {
+
+        ApplicationManagers.getInstance().getOrderManagement().getAllOrders()
+                .stream()
+                .forEach(System.out::println);
+    }
 }

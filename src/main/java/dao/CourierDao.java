@@ -1,24 +1,18 @@
 package dao;
 
+import classfiles.Courier;
+
 import java.util.List;
 
 public interface CourierDao {
 
     List<CourierDao> showAllDishes();
-    CourierDao createCourier();
-    void addCourier(CourierDao courierDao);
-    void removeCourier(CourierDao courierDao);
+    Courier findCourierById();
+    Courier createCourier();
+    void addCourier(Courier courier);
+    void removeCourier();
     void updateWage();
+    void connectExistingCourierToExistingOrder();
 }
-//    @Id
-//    @GeneratedValue
-//    private Long id;
-//    @Basic
-//    private String courierName;
-//    @Basic
-//    private String deliveryType;
-//    @Basic
-//    private String wage;
-//    @OneToMany(mappedBy = "courier")
-//    private List<Order> foodOrders;
+
 

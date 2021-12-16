@@ -81,4 +81,14 @@ public class Dish {
         order.getDishes().remove(this);
     }
 
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", restaurant=" + restaurant +
+                ", orders=" + orders +
+                '}';
+    }
 }

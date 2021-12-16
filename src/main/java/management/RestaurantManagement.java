@@ -1,14 +1,19 @@
 package management;
 
 import applicationContext.ApplicationContext;
+import classfiles.Customer;
+import classfiles.Dish;
+import classfiles.Order;
 import classfiles.Restaurant;
 import dao.RestaurantDao;
 import io.IOUtils;
+import main.MainProgram;
 
 import javax.persistence.*;
 import java.util.List;
 
 public class RestaurantManagement implements RestaurantDao {
+
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
@@ -16,8 +21,19 @@ public class RestaurantManagement implements RestaurantDao {
         EntityManager em = emf.createEntityManager();
 
         TypedQuery<Restaurant> query = em.createNamedQuery("Restaurant.showAllRestaurants", Restaurant.class);
-        em.close();
+        //em.close(); Gick ej att ha denna rad här blir IllegatStateException
         return query.getResultList();
+    }
+
+    @Override
+    public Restaurant findRestaurantById() {
+        EntityManager em = emf.createEntityManager();
+        int id = ioUtils.askForId();
+
+        Restaurant restaurant = em.find(Restaurant.class, id);
+
+        em.close();
+        return restaurant;
     }
 
     public Restaurant createRestaurant() {
@@ -43,18 +59,15 @@ public class RestaurantManagement implements RestaurantDao {
         //Adda till vaddå?
     }
 
-    public void removeRestaurant(Restaurant restaurant) {
+    public void removeRestaurant() {
         EntityManager em = emf.createEntityManager();
 
         int restaurantId = ioUtils.askForId();
-        Restaurant restaurant2 = em.find(Restaurant.class, restaurantId);
-        if (restaurant2 != null) {
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
+        em.getTransaction().begin();
             em.remove(em.find(Restaurant.class, restaurantId));
-            System.out.println("Restaurant with id " + restaurantId + " and name " + restaurant.getRestaurantName() + " has been removed");
-            //Är det möjligt att ha printouten i IOUtils? Eller ska den tas bort?
-        } else {
-            System.out.println("There is no restaurant with id: " + restaurantId);
-        }
+            em.getTransaction().commit();
+            em.close();
     }
 
     public void updateAdressById() {
@@ -71,5 +84,22 @@ public class RestaurantManagement implements RestaurantDao {
         } else {
             System.out.println("There is no restaurant with id : " + restaurantId);
         }
+    }
+    public void connectExistingRestaurantToExistingDish(){
+
+        ApplicationContext.getInstance().getIOUTILS().printAllRestaurants();
+        int restaurantId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+        int dishId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
+        Dish dish = em.find(Dish.class, dishId);
+
+        em.getTransaction().begin();
+        restaurant.addDish(dish);
+        em.getTransaction().commit();
+        em.close();
     }
 }

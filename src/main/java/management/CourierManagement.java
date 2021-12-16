@@ -14,12 +14,10 @@ public class CourierManagement {
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
-    public List<Courier> showAllCouriers() {
+    public List<Courier> getAllCouriers() {
 
         EntityManager em = emf.createEntityManager();
         TypedQuery<Courier> query = em.createNamedQuery("Courier.showAllCouriers", Courier.class);
-
-        //query.getResultStream().forEach(System.out::println);
 
         em.close();
         return query.getResultList();
@@ -56,7 +54,7 @@ public class CourierManagement {
     }
 
     public void updateCourierWage() {
-        showAllCouriers();
+        getAllCouriers();
 
         int employeeId = ioUtils.askForId();
         double newWage = ioUtils.askForWage();

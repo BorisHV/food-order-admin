@@ -83,5 +83,4 @@ public class Order {
     public void removeDish(Dish dish) {
         getDishes().remove(dish);
     }
-
 }

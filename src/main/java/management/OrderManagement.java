@@ -1,16 +1,21 @@
 package management;
 
 import applicationContext.ApplicationContext;
+import applicationContext.ApplicationManagers;
+import classfiles.Courier;
 import classfiles.Customer;
+import classfiles.Dish;
 import classfiles.Order;
 import dao.OrderDao;
 import io.IOUtils;
-import org.eclipse.persistence.internal.oxm.schema.model.List;
+import main.MainProgram;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.List;
+
+import static main.MainProgram.*;
 
 public class OrderManagement implements OrderDao {
 
@@ -18,27 +23,42 @@ public class OrderManagement implements OrderDao {
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
     @Override
-    public List<Order> showAllOrders() {
-
+    public List<Order> getAllOrders() {
         EntityManager em = emf.createEntityManager();
+
         TypedQuery<Order> query = em.createNamedQuery("Order.getAllOrders", Order.class);
         em.close();
 
         return query.getResultList();
-
     }
 
     @Override
-    public Customer createOrder() {
+    public Order findOrderById() {
+        EntityManager em = emf.createEntityManager();
+        int id = ioUtils.askForId();
 
-        String name = ioUtils.askForName();
-        String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
-        String address = ioUtils.askForAddress();
-        double tip = ioUtils.askForOrderTip();
+        Order order = em.find(Order.class, id);
+
+        em.close();
+        return order;
+    }
+
+    @Override
+    public Order createOrder() {
+        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+        int id = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Dish dish = em.find(Dish.class, id);
+        //TODO
+        em.find(Courier.class, 1);
+
+        double tip = ioUtils.askForTip();
+
 
         Order order = new Order(tip);
+        order.addDish(dish);
         return order;
-
     }
 
     @Override
