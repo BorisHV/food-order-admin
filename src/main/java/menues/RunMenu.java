@@ -9,12 +9,10 @@ import javax.persistence.EntityManagerFactory;
 
 public class RunMenu {
 
-    EntityManagerFactory emf;
-    IOUtils ioUtils;
 
-    CourierManagement courierManagement = new CourierManagement(emf, ioUtils);
-    DishManagement dishManagement = new DishManagement(emf, ioUtils);
-    RestaurantManagement restaurantManagement = new RestaurantManagement(emf, ioUtils);
+    CourierManagement courierManagement = new CourierManagement();
+    DishManagement dishManagement = new DishManagement();
+    RestaurantManagement restaurantManagement = new RestaurantManagement();
 
 
     public void runCourierMenu(int menuOption) {

@@ -1,6 +1,7 @@
 package management;
 
 import classfiles.Courier;
+import instance.ApplicationContext;
 import instance.CreateInstance;
 import io.IOUtils;
 
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class CourierManagement {
 
-    EntityManagerFactory emf = CreateInstance.getEmf();
-    IOUtils ioUtils = CreateInstance.getIoUtils();
+    EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
+    IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
+
 
     public List<Courier> showAllCouriers() {
 
