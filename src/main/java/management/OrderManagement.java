@@ -1,79 +1,90 @@
 package management;
 
-import classfiles.Customer;
 import applicationContext.ApplicationContext;
+import classfiles.Customer;
+import classfiles.Order;
+import dao.OrderDao;
 import io.IOUtils;
+import org.eclipse.persistence.internal.oxm.schema.model.List;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class CustomerManagement {
+public class OrderManagement implements OrderDao {
 
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
-    public List<Customer> showAllCustomers() {
+    @Override
+    public List<Order> showAllOrders() {
+
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Customer> query = em.createNamedQuery("Customer.getAllCustomers", Customer.class);
+        TypedQuery<Order> query = em.createNamedQuery("Order.getAllOrders", Order.class);
         em.close();
 
         return query.getResultList();
+
     }
 
-    public Customer findCustomerById() {
-        EntityManager em = emf.createEntityManager();
-        int id = ioUtils.askForId();
+    @Override
+    public Customer createOrder() {
 
-        Customer customer = em.find(Customer.class, id);
-
-        em.close();
-        return customer;
-    }
-
-    public Customer createCustomer() {
         String name = ioUtils.askForName();
         String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
         String address = ioUtils.askForAddress();
+        double tip = ioUtils.askForOrderTip();
 
-        Customer customer = new Customer(name, phoneNumber, address);
-        return customer;
+        Order order = new Order(tip);
+        return order;
+
     }
 
-    public void addCustomer(Customer customer) {
+    @Override
+    public void addOrder(Order order) {
+
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        em.persist(customer);
+        em.persist(order);
         em.getTransaction().commit();
 
         em.close();
+
     }
 
-    public void removeCustomer() {
+    @Override
+    public void removeOrder() {
         int id = ioUtils.askForId();
         //TODO nulla
+
         EntityManager em = emf.createEntityManager();
-        Customer customer = em.find(Customer.class, id);
+        Order order = em.find(Order.class, id);
 
         em.getTransaction().begin();
-        em.remove(customer);
+        em.remove(order);
         em.getTransaction().commit();
 
         em.close();
+
     }
 
-    public void changePhoneNumber() {
+    @Override
+    public void updateTip() {
+
         int id = ioUtils.askForId();
         // TODO change name of method!!!!
-        String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
+        double tip = ioUtils.askForTip();
 
         EntityManager em = emf.createEntityManager();
 
-        Customer customer = em.find(Customer.class, id);
+        Order order = em.find(Order.class, id);
 
         em.getTransaction().begin();
-        customer.setPhoneNumber(phoneNumber);
+        order.setTip(tip);
         em.getTransaction().commit();
         em.close();
+
     }
 }

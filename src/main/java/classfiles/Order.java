@@ -2,22 +2,23 @@ package classfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+@NamedQueries(
+        {
+                @NamedQuery(name = "Order.getAllOrders", query = "SELECT o FROM Order o"),
+                @NamedQuery(name = "Order.findOrderById", query = "SELECT o FROM Order o")
+        }
+)
 
 @Entity
 public class Order {
 
     @Id
     @GeneratedValue
-    private Long id;
-    @Basic
-    private String tip;
+    private int id;
+    private double tip;
+
     @ManyToOne
     private Courier courier;
     @ManyToOne
@@ -25,19 +26,26 @@ public class Order {
     @ManyToMany(mappedBy = "orders")
     private List<Dish> dishes;
 
-    public Long getId() {
+    public Order() {
+    }
+
+    public Order(double tip) {
+        this.tip = tip;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTip() {
+    public double getTip() {
         return tip;
     }
 
-    public void setTip(String tip) {
+    public void setTip(double tip) {
         this.tip = tip;
     }
 
