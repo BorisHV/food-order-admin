@@ -17,7 +17,7 @@ public class RestaurantManagement implements RestaurantDao {
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
-    public List<Restaurant> showAllRestaurants() {
+    public List<Restaurant> getAllRestaurants() {
         EntityManager em = emf.createEntityManager();
 
         TypedQuery<Restaurant> query = em.createNamedQuery("Restaurant.showAllRestaurants", Restaurant.class);

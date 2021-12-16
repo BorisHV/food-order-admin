@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class ApplicationContext {
+
     private final EntityManagerFactory EMF;
     private final IOUtils IOUTILS;
     private static ApplicationContext context;

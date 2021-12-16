@@ -77,10 +77,23 @@ public class Order {
     }
 
     public void addDish(Dish dish) {
+
         getDishes().add(dish);
+        dish.getOrders().add(this);
     }
 
     public void removeDish(Dish dish) {
         getDishes().remove(dish);
+    }
+
+    public void addCourier(Courier courier){
+        setCourier(courier);
+        courier.getOrders().add(this);
+    }
+
+
+    public void addCustomer(Customer customer){
+        setCustomer(customer);
+        customer.getOrders().add(this);
     }
 }

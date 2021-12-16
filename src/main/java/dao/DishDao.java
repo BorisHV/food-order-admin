@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DishDao {
 
-    List<Dish> showAllDishes();
+    List<Dish> getAllDishes();
     Dish findDishById();
     Dish createDish();
     void addDish(Dish dish);

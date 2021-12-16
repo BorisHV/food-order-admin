@@ -70,4 +70,9 @@ public class Courier {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
+    public void addOrder(Order order) {
+        getOrders().add(order);
+        order.setCourier(this);
+    }
 }

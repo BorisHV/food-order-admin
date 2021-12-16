@@ -5,6 +5,8 @@ import java.util.List;
 import applicationContext.ApplicationContext;
 import classfiles.Customer;
 import classfiles.Dish;
+import classfiles.Order;
+import classfiles.Restaurant;
 import dao.DishDao;
 import io.IOUtils;
 
@@ -13,8 +15,21 @@ import javax.persistence.EntityManagerFactory;
 
 
 public class DishManagement implements DishDao {
+
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
+
+    @Override
+    public List<Dish> getAllDishes() {
+        EntityManager em = emf.createEntityManager();
+
+        List<Dish> allDishes = em.createQuery("SELECT dish FROM Dish dish", Dish.class)
+                .getResultList();
+
+        em.close();
+
+        return allDishes;
+    }
 
     @Override
     public Dish createDish() {
@@ -35,17 +50,6 @@ public class DishManagement implements DishDao {
         em.close();
     }
 
-    @Override
-    public List<Dish> showAllDishes() {
-        EntityManager em = emf.createEntityManager();
-
-        List<Dish> allDishes = em.createQuery("SELECT dish FROM Dish dish", Dish.class)
-                .getResultList();
-
-        em.close();
-
-        return allDishes;
-    }
 
     @Override
     public Dish findDishById() {
@@ -70,6 +74,44 @@ public class DishManagement implements DishDao {
         dish.setPrice(newPrice);
         em.getTransaction().commit();
 
+        em.close();
+    }
+
+    @Override
+    public void connectExistingDishToExistingRestaurant() {
+
+        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+        int dishId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllRestaurants();
+        int restaurantId = ioUtils.askForId();
+
+
+        EntityManager em = emf.createEntityManager();
+        Dish dish = em.find(Dish.class, dishId);
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
+
+        em.getTransaction().begin();
+        dish.addRestaurant(restaurant);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    @Override
+    public void connectExistingDishToExistingOrder() {
+        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+        int dishId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllOrders();
+        int orderId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Dish dish = em.find(Dish.class, dishId);
+        Order order = em.find(Order.class, orderId);
+
+        em.getTransaction().begin();
+        dish.addOrder(order);
+        em.getTransaction().commit();
         em.close();
     }
 

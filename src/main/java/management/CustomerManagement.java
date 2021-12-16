@@ -2,17 +2,19 @@ package management;
 
 import classfiles.Customer;
 import applicationContext.ApplicationContext;
+import classfiles.Order;
+import dao.CustomerDao;
 import io.IOUtils;
 
 import javax.persistence.*;
 import java.util.List;
 
-public class CustomerManagement {
+public class CustomerManagement implements CustomerDao {
 
     EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
     IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
-    public List<Customer> showAllCustomers() {
+    public List<Customer> getAllCustomers() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Customer> query = em.createNamedQuery("Customer.getAllCustomers", Customer.class);
         em.close();
@@ -62,9 +64,8 @@ public class CustomerManagement {
         em.close();
     }
 
-    public void changePhoneNumber() {
+    public void updatePhoneNumber() {
         int id = ioUtils.askForId();
-        // TODO change name of method!!!!
         String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
 
         EntityManager em = emf.createEntityManager();
@@ -73,6 +74,25 @@ public class CustomerManagement {
 
         em.getTransaction().begin();
         customer.setPhoneNumber(phoneNumber);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    @Override
+    public void connectExistingCustomerToExistingOrder() {
+
+        ApplicationContext.getInstance().getIOUTILS().printAllCustomers();
+        int customerId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllOrders();
+        int orderId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Customer customer = em.find(Customer.class, customerId);
+        Order order = em.find(Order.class, orderId);
+
+        em.getTransaction().begin();
+        customer.addOrder(order);
         em.getTransaction().commit();
         em.close();
     }

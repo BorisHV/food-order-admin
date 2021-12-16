@@ -66,7 +66,7 @@ public class Customer {
         this.address = address;
     }
 
-    public List<Order> getFoodOrders() {
+    public List<Order> getOrders() {
         if (orders == null) {
             orders = new ArrayList<>();
         }
@@ -77,13 +77,13 @@ public class Customer {
         this.orders = orders;
     }
 
-    public void addFoodOrder(Order order) {
-        getFoodOrders().add(order);
+    public void addOrder(Order order) {
+        getOrders().add(order);
         order.setCustomer(this);
     }
 
     public void removeFoodOrder(Order order) {
-        getFoodOrders().remove(order);
+        getOrders().remove(order);
         order.setCustomer(null);
     }
 }

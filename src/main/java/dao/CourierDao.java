@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CourierDao {
 
-    List<CourierDao> showAllDishes();
+    List<Courier> getAllCouriers();
     Courier findCourierById();
     Courier createCourier();
     void addCourier(Courier courier);
     void removeCourier();
-    void updateWage();
+    void updateCourierWage();
     void connectExistingCourierToExistingOrder();
 }
 

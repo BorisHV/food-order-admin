@@ -1,9 +1,6 @@
 package io;
 
-import applicationContext.ApplicationContext;
 import applicationContext.ApplicationManagers;
-import main.MainProgram;
-import management.DishManagement;
 
 import java.util.Scanner;
 
@@ -143,14 +140,14 @@ public class IOUtils {
 
     public void printAllDishes() {
 
-        ApplicationManagers.getInstance().getDishManagement().showAllDishes()
+        ApplicationManagers.getInstance().getDishManagement().getAllDishes()
                 .stream()
                 .forEach(System.out::println);
     }
 
     public void printAllRestaurants() {
 
-        ApplicationManagers.getInstance().getRestaurantManagement().showAllRestaurants()
+        ApplicationManagers.getInstance().getRestaurantManagement().getAllRestaurants()
                 .stream()
                 .forEach(System.out::println);
     }
@@ -164,7 +161,7 @@ public class IOUtils {
 
     public void printAllCustomers() {
 
-        ApplicationManagers.getInstance().getCustomerManagement().showAllCustomers()
+        ApplicationManagers.getInstance().getCustomerManagement().getAllCustomers()
                 .stream()
                 .forEach(System.out::println);
     }

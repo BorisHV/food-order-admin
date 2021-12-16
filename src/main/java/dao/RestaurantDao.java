@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RestaurantDao {
 
-    List<Restaurant> showAllRestaurants();
+    List<Restaurant> getAllRestaurants();
     Restaurant findRestaurantById();
     Restaurant createRestaurant();
     void addRestaurant(Restaurant restaurant);

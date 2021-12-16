@@ -21,7 +21,7 @@ public class RunMenu {
         switch (menuOption) {
             case 1 -> courierManagement.getAllCouriers();
             case 2 -> courierManagement.addCourier(courierManagement.createCourier());
-            case 3 -> courierManagement.deleteCourier();
+            case 3 -> courierManagement.removeCourier();
             case 4 -> courierManagement.updateCourierWage();
             case 0 -> System.out.println("Exiting program...");
             default -> System.out.println("Option " + menuOption + " is not implemented.");

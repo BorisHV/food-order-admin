@@ -1,21 +1,14 @@
 package management;
 
 import applicationContext.ApplicationContext;
-import applicationContext.ApplicationManagers;
-import classfiles.Courier;
-import classfiles.Customer;
-import classfiles.Dish;
-import classfiles.Order;
+import classfiles.*;
 import dao.OrderDao;
 import io.IOUtils;
-import main.MainProgram;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.List;
-
-import static main.MainProgram.*;
 
 public class OrderManagement implements OrderDao {
 
@@ -24,12 +17,13 @@ public class OrderManagement implements OrderDao {
 
     @Override
     public List<Order> getAllOrders() {
-        EntityManager em = emf.createEntityManager();
 
+        EntityManager em = emf.createEntityManager();
         TypedQuery<Order> query = em.createNamedQuery("Order.getAllOrders", Order.class);
-        em.close();
+        //em.close();
 
         return query.getResultList();
+
     }
 
     @Override
@@ -41,24 +35,20 @@ public class OrderManagement implements OrderDao {
 
         em.close();
         return order;
+
     }
 
     @Override
     public Order createOrder() {
-        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
-        int id = ioUtils.askForId();
 
-        EntityManager em = emf.createEntityManager();
-        Dish dish = em.find(Dish.class, id);
-        //TODO
-        em.find(Courier.class, 1);
-
+        String name = ioUtils.askForName();
+        String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
+        String address = ioUtils.askForAddress();
         double tip = ioUtils.askForTip();
 
-
         Order order = new Order(tip);
-        order.addDish(dish);
         return order;
+
     }
 
     @Override
@@ -103,6 +93,63 @@ public class OrderManagement implements OrderDao {
 
         em.getTransaction().begin();
         order.setTip(tip);
+        em.getTransaction().commit();
+        em.close();
+
+    }
+
+    @Override
+    public void connectExistingOrderToExistingDish() {
+        ApplicationContext.getInstance().getIOUTILS().printAllOrders();
+        int orderId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+        int dishId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Order order = em.find(Order.class, orderId);
+        Dish dish = em.find(Dish.class, dishId);
+
+        em.getTransaction().begin();
+        order.addDish(dish);
+        em.getTransaction().commit();
+        em.close();
+
+    }
+
+    @Override
+    public void connectExistingOrderToExistingCourier() {
+        ApplicationContext.getInstance().getIOUTILS().printAllOrders();
+        int orderId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllCouriers();
+        int courierId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Order order = em.find(Order.class, orderId);
+        Courier courier = em.find(Courier.class, courierId);
+
+        em.getTransaction().begin();
+        order.addCourier(courier);
+        em.getTransaction().commit();
+        em.close();
+
+    }
+
+    @Override
+    public void connectExistingOrderToExistingCustomer() {
+        ApplicationContext.getInstance().getIOUTILS().printAllOrders();
+        int orderId = ioUtils.askForId();
+
+        ApplicationContext.getInstance().getIOUTILS().printAllCustomers();
+        int customerId = ioUtils.askForId();
+
+        EntityManager em = emf.createEntityManager();
+        Order order = em.find(Order.class, orderId);
+        Customer customer = em.find(Customer.class, customerId);
+
+        em.getTransaction().begin();
+        order.addCustomer(customer);
         em.getTransaction().commit();
         em.close();
 

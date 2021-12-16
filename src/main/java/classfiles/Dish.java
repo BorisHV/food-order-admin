@@ -60,7 +60,7 @@ public class Dish {
         this.restaurant = restaurant;
     }
 
-    public List<Order> getFoodOrders() {
+    public List<Order> getOrders() {
         if (orders == null) {
             orders = new ArrayList<>();
         }
@@ -72,12 +72,12 @@ public class Dish {
     }
 
     public void addFoodOrder(Order order) {
-        getFoodOrders().add(order);
+        getOrders().add(order);
         order.getDishes().add(this);
     }
 
     public void removeFoodOrder(Order order) {
-        getFoodOrders().remove(order);
+        getOrders().remove(order);
         order.getDishes().remove(this);
     }
 
@@ -90,5 +90,16 @@ public class Dish {
                 ", restaurant=" + restaurant +
                 ", orders=" + orders +
                 '}';
+    }
+
+    public void addRestaurant(Restaurant restaurant) {
+
+        setRestaurant(restaurant);
+        restaurant.getDishes().add(this);
+    }
+
+    public void addOrder(Order order) {
+        getOrders().add(order);
+        order.getDishes().add(this);
     }
 }
