@@ -6,6 +6,7 @@ import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -19,10 +20,26 @@ public class CourierManagement {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Courier> query = em.createNamedQuery("Courier.showAllCouriers", Courier.class);
 
-        //query.getResultStream().forEach(System.out::println);
-
         em.close();
         return query.getResultList();
+    }
+
+    public Courier findCourierById() {
+        EntityManager em = emf.createEntityManager();
+        int employeeId = ioUtils.askForId();
+
+        TypedQuery<Courier> query = em.createNamedQuery("Courier.findCourierById", Courier.class);
+
+        //alt
+       /* Courier courier = null;
+        try {
+            courier = query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("No courier with ID " + employeeId + " found.");
+        }*/
+
+        em.close();
+        return queary.getSingleResult();
     }
 
     public Courier createCourier() {

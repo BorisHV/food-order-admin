@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 @NamedQueries(
         {
-                @NamedQuery(name = "Courier.showAllCouriers", query = "SELECT c FROM Courier c")
+                @NamedQuery(name = "Courier.showAllCouriers", query = "SELECT c FROM Courier c"),
+                @NamedQuery(name = "Courier.findCourierById", query = "SELECT c FROM Courier c " +
+                        "WHERE c.employeeId = :id"),
+
         }
 )
 

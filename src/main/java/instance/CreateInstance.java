@@ -5,7 +5,7 @@ import io.IOUtils;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public  class CreateInstance {
+public class CreateInstance {
     private final static IOUtils IOUTILS = new IOUtils();
     private final static EntityManagerFactory EMF = Persistence.createEntityManagerFactory("PU");
 
