@@ -2,34 +2,43 @@ package classfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
+@NamedQueries(
+        {
+                @NamedQuery(name = "Customer.getAllCustomers", query = "SELECT c FROM Customer c"),
+                @NamedQuery(name = "Customer.findCustomerById", query = "SELECT c FROM Customer c")
+        }
+)
 
 @Entity
 public class Customer {
 
     @Id
     @GeneratedValue
-    private Long id;
-    @Basic
+    private int id;
+
     private String name;
-    @Basic
-    private String telephoneNumber;
-    @Basic
-    private String numberOfOrders;
-    @Basic
-    private String adress;
-    @OneToMany(mappedBy = "customer")
+    private String phoneNumber;
+    private String address;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "customer")
     private List<Order> orders;
 
-    public Long getId() {
+    public Customer() {
+    }
+
+    public Customer(String name, String phoneNumber, String adress) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = adress;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,28 +50,20 @@ public class Customer {
         this.name = name;
     }
 
-    public String getTelephoneNumber() {
-        return telephoneNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getNumberOfOrders() {
-        return numberOfOrders;
+    public String getAddress() {
+        return address;
     }
 
-    public void setNumberOfOrders(String numberOfOrders) {
-        this.numberOfOrders = numberOfOrders;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public List<Order> getFoodOrders() {
@@ -85,5 +86,4 @@ public class Customer {
         getFoodOrders().remove(order);
         order.setCustomer(null);
     }
-
 }

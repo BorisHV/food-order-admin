@@ -10,7 +10,7 @@ import javax.persistence.EntityManagerFactory;
 public class RunMenu {
 
     EntityManagerFactory emf;
-    IOUtils ioUtils;
+    IOUtils ioUtils = new IOUtils();
 
     CourierManagement courierManagement = new CourierManagement(emf, ioUtils);
     DishManagement dishManagement = new DishManagement(emf, ioUtils);
@@ -28,15 +28,17 @@ public class RunMenu {
         }
     }
 
-    public void runRestaurantMenu(){
+    public void runRestaurantMenu() {
 
         int choice = ioUtils.readInt();
 
-        switch(choice){
+        switch (choice) {
             case 1 -> System.out.println("Show all restaurants: ");
             case 2 -> System.out.println("Create a new restaurant: ");
             case 4 -> System.out.println("Update adress of a restaurant: ");
             case 5 -> System.out.println("Remove a restaurant: ");
+
+
         }
     }
 }

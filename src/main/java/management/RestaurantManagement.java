@@ -1,23 +1,16 @@
 package management;
 
+import applicationContext.ApplicationContext;
 import classfiles.Restaurant;
 import dao.RestaurantDao;
-import instance.CreateInstance;
 import io.IOUtils;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Scanner;
 
 public class RestaurantManagement implements RestaurantDao {
-    EntityManagerFactory emf;
-    IOUtils ioUtils;
-    Scanner scanner = new Scanner(System.in);
-
-    public RestaurantManagement(EntityManagerFactory emf, IOUtils ioUtils) {
-        this.emf = emf;
-        this.ioUtils = ioUtils;
-    }
+    EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
+    IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
     public List<Restaurant> showAllRestaurants() {
         EntityManager em = emf.createEntityManager();
@@ -31,13 +24,12 @@ public class RestaurantManagement implements RestaurantDao {
         EntityManager em = emf.createEntityManager();
 
         Restaurant restaurant = new Restaurant();
-        ioUtils.askForName();
-        restaurant.setRestaurantName(ioUtils.readString());
-        ioUtils.askForAddress();
-        restaurant.setAdress(ioUtils.readString());
-        ioUtils.askForCategory();
-
-        restaurant.setCategory(ioUtils.readString());
+        String name = ioUtils.askForName();
+        restaurant.setRestaurantName(name);
+        String adress = ioUtils.askForAddress();
+        restaurant.setAdress(adress);
+        String category = ioUtils.askForCategory();
+        restaurant.setCategory(category);
 
         em.getTransaction().begin();
         em.persist(restaurant);
@@ -56,8 +48,13 @@ public class RestaurantManagement implements RestaurantDao {
 
         int restaurantId = ioUtils.askForId();
         Restaurant restaurant2 = em.find(Restaurant.class, restaurantId);
-        em.remove(em.find(Restaurant.class, restaurantId));
-        System.out.println("Restaurant with id " + restaurantId + " and name " + restaurant.getRestaurantName() + " has been removed");
+        if (restaurant2 != null) {
+            em.remove(em.find(Restaurant.class, restaurantId));
+            System.out.println("Restaurant with id " + restaurantId + " and name " + restaurant.getRestaurantName() + " has been removed");
+            //Är det möjligt att ha printouten i IOUtils? Eller ska den tas bort?
+        } else {
+            System.out.println("There is no restaurant with id: " + restaurantId);
+        }
     }
 
     public void updateAdressById() {
@@ -65,10 +62,14 @@ public class RestaurantManagement implements RestaurantDao {
 
         int restaurantId = ioUtils.askForId();
         Restaurant restaurant = em.find(Restaurant.class, restaurantId);
-        String adress = ioUtils.askForAddress();
-        em.getTransaction().begin();
-        restaurant.setAdress(adress);
-        em.getTransaction().commit();
-        em.close();
+        if (restaurant != null) {
+            String adress = ioUtils.askForAddress();
+            em.getTransaction().begin();
+            restaurant.setAdress(adress);
+            em.getTransaction().commit();
+            em.close();
+        } else {
+            System.out.println("There is no restaurant with id : " + restaurantId);
+        }
     }
 }

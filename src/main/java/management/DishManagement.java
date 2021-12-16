@@ -1,20 +1,19 @@
 package management;
 
 import java.util.List;
+
+import applicationContext.ApplicationContext;
 import classfiles.Dish;
 import dao.DishDao;
 import io.IOUtils;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 
 public class DishManagement implements DishDao {
-    EntityManagerFactory emf;
-    IOUtils ioUtils;
-    public DishManagement(EntityManagerFactory emf, IOUtils utils) {
-        this.emf = emf;
-        this.ioUtils = utils;
-    }
+    EntityManagerFactory emf = ApplicationContext.getInstance().getEMF();
+    IOUtils ioUtils = ApplicationContext.getInstance().getIOUTILS();
 
     @Override
     public Dish createDish() {
@@ -23,6 +22,7 @@ public class DishManagement implements DishDao {
         Dish dish = new Dish(name, price);
         return dish;
     }
+
     public void addDish(Dish dish) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -30,6 +30,7 @@ public class DishManagement implements DishDao {
         em.getTransaction().commit();
         em.close();
     }
+
     @Override
     public List<Dish> showAllDishes() {
         EntityManager em = emf.createEntityManager();
@@ -38,6 +39,7 @@ public class DishManagement implements DishDao {
         em.close();
         return allDishes;
     }
+
     @Override
     public void updatePrice() {
         int id = ioUtils.askForId();
@@ -49,6 +51,7 @@ public class DishManagement implements DishDao {
         em.getTransaction().commit();
         em.close();
     }
+
     @Override
     public void removeDish() {
         int id = ioUtils.askForId();

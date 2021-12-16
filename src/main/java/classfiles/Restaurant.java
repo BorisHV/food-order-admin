@@ -77,4 +77,12 @@ public class Restaurant {
         dish.setRestaurant(null);
     }
 
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", restaurantName='" + restaurantName + '\'' +
+                ", adress='" + adress + '\'' +
+                ", category='" + category;
+    }
 }

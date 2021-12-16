@@ -22,7 +22,7 @@ public class Order {
     private Courier courier;
     @ManyToOne
     private Customer customer;
-    @ManyToMany(mappedBy = "foodOrders")
+    @ManyToMany(mappedBy = "orders")
     private List<Dish> dishes;
 
     public Long getId() {
