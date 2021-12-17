@@ -13,7 +13,7 @@ public interface DishDao {
     void removeDish();
     void updatePrice();
     void connectExistingDishToExistingRestaurant();
-    void connectExistingDishToExistingOrder();
+    void connectExistingDishToExistingFoodOrder();
 }
 
 

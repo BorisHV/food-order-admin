@@ -12,7 +12,7 @@ public interface CourierDao {
     void addCourier(Courier courier);
     void removeCourier();
     void updateCourierWage();
-    void connectExistingCourierToExistingOrder();
+    void connectExistingCourierToExistingFoodOrder();
 }
 
 

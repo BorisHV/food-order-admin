@@ -10,7 +10,7 @@ public class IOUtils {
 
 //    public int printMainMenu() {
 //        //    1. customerMenu
-//        //    2. runRestaurantMenu
+//        //    2. printRestaurantMenu
 //        //    3. courierMenu
 //    }
 //

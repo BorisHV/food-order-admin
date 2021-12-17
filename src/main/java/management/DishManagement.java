@@ -3,9 +3,8 @@ package management;
 import java.util.List;
 
 import applicationContext.ApplicationContext;
-import classfiles.Customer;
 import classfiles.Dish;
-import classfiles.Order;
+import classfiles.FoodOrder;
 import classfiles.Restaurant;
 import dao.DishDao;
 import io.IOUtils;
@@ -98,7 +97,7 @@ public class DishManagement implements DishDao {
     }
 
     @Override
-    public void connectExistingDishToExistingOrder() {
+    public void connectExistingDishToExistingFoodOrder() {
         ApplicationContext.getInstance().getIOUTILS().printAllDishes();
         int dishId = ioUtils.askForId();
 
@@ -107,10 +106,10 @@ public class DishManagement implements DishDao {
 
         EntityManager em = emf.createEntityManager();
         Dish dish = em.find(Dish.class, dishId);
-        Order order = em.find(Order.class, orderId);
+        FoodOrder foodOrder = em.find(FoodOrder.class, orderId);
 
         em.getTransaction().begin();
-        dish.addOrder(order);
+        dish.addOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
     }

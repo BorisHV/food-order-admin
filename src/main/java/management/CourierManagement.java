@@ -7,7 +7,6 @@ import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CourierManagement implements CourierDao {
@@ -18,10 +17,10 @@ public class CourierManagement implements CourierDao {
     public List<Courier> getAllCouriers() {
 
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Courier> query = em.createNamedQuery("Courier.showAllCouriers", Courier.class);
+        List<Courier> couriers = em.createNamedQuery("Courier.showAllCouriers", Courier.class).getResultList();
 
         em.close();
-        return query.getResultList();
+        return couriers;
     }
 
     public Courier findCourierById() {
@@ -80,7 +79,7 @@ public class CourierManagement implements CourierDao {
     }
 
     @Override
-    public void connectExistingCourierToExistingOrder() {
+    public void connectExistingCourierToExistingFoodOrder() {
         ApplicationContext.getInstance().getIOUTILS().printAllCouriers();
         int courierId = ioUtils.askForId();
 
@@ -89,10 +88,10 @@ public class CourierManagement implements CourierDao {
 
         EntityManager em = emf.createEntityManager();
         Courier courier = em.find(Courier.class, courierId);
-        Order order = em.find(Order.class, orderId);
+        FoodOrder foodOrder = em.find(FoodOrder.class, orderId);
 
         em.getTransaction().begin();
-        courier.addOrder(order);
+        courier.addOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
 

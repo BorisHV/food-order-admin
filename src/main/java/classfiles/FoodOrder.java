@@ -6,13 +6,13 @@ import javax.persistence.*;
 
 @NamedQueries(
         {
-                @NamedQuery(name = "Order.getAllOrders", query = "SELECT o FROM Order o"),
-                @NamedQuery(name = "Order.findOrderById", query = "SELECT o FROM Order o")
+                @NamedQuery(name = "Order.getAllOrders", query = "SELECT o FROM FoodOrder o"),
+                @NamedQuery(name = "Order.findOrderById", query = "SELECT o FROM FoodOrder o")
         }
 )
 
 @Entity
-public class Order {
+public class FoodOrder {
 
     @Id
     @GeneratedValue
@@ -23,13 +23,13 @@ public class Order {
     private Courier courier;
     @ManyToOne
     private Customer customer;
-    @ManyToMany(mappedBy = "orders")
+    @ManyToMany(mappedBy = "foodOrders")
     private List<Dish> dishes;
 
-    public Order() {
+    public FoodOrder() {
     }
 
-    public Order(double tip) {
+    public FoodOrder(double tip) {
         this.tip = tip;
     }
 
@@ -95,5 +95,16 @@ public class Order {
     public void addCustomer(Customer customer){
         setCustomer(customer);
         customer.getOrders().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return "FoodOrder{" +
+                "id=" + id +
+                ", tip=" + tip +
+                ", courier=" + courier +
+                ", customer=" + customer +
+                ", dishes=" + dishes +
+                '}';
     }
 }

@@ -1,13 +1,10 @@
 package management;
 
 import applicationContext.ApplicationContext;
-import classfiles.Customer;
 import classfiles.Dish;
-import classfiles.Order;
 import classfiles.Restaurant;
 import dao.RestaurantDao;
 import io.IOUtils;
-import main.MainProgram;
 
 import javax.persistence.*;
 import java.util.List;
@@ -37,9 +34,9 @@ public class RestaurantManagement implements RestaurantDao {
     }
 
     public Restaurant createRestaurant() {
-        EntityManager em = emf.createEntityManager();
 
         Restaurant restaurant = new Restaurant();
+
         String name = ioUtils.askForName();
         restaurant.setRestaurantName(name);
         String adress = ioUtils.askForAddress();
@@ -47,16 +44,18 @@ public class RestaurantManagement implements RestaurantDao {
         String category = ioUtils.askForCategory();
         restaurant.setCategory(category);
 
-        em.getTransaction().begin();
-        em.persist(restaurant);
-        em.getTransaction().commit();
-        em.close();
 
         return restaurant;
     }
 
     public void addRestaurant(Restaurant restaurant) {
-        //Adda till vaddå?
+
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        em.persist(restaurant);
+        em.getTransaction().commit();
+        em.close();
     }
 
     public void removeRestaurant() {
@@ -87,10 +86,10 @@ public class RestaurantManagement implements RestaurantDao {
     }
     public void connectExistingRestaurantToExistingDish(){
 
-        ApplicationContext.getInstance().getIOUTILS().printAllRestaurants();
+        ioUtils.printAllRestaurants();
         int restaurantId = ioUtils.askForId();
 
-        ApplicationContext.getInstance().getIOUTILS().printAllDishes();
+       ioUtils.printAllDishes();
         int dishId = ioUtils.askForId();
 
         EntityManager em = emf.createEntityManager();

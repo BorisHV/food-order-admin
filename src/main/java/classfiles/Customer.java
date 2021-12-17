@@ -23,7 +23,7 @@ public class Customer {
     private String address;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "customer")
-    private List<Order> orders;
+    private List<FoodOrder> foodOrders;
 
     public Customer() {
     }
@@ -66,24 +66,34 @@ public class Customer {
         this.address = address;
     }
 
-    public List<Order> getOrders() {
-        if (orders == null) {
-            orders = new ArrayList<>();
+    public List<FoodOrder> getOrders() {
+        if (foodOrders == null) {
+            foodOrders = new ArrayList<>();
         }
-        return orders;
+        return foodOrders;
     }
 
-    public void setFoodOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setFoodOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
     }
 
-    public void addOrder(Order order) {
-        getOrders().add(order);
-        order.setCustomer(this);
+    public void addOrder(FoodOrder foodOrder) {
+        getOrders().add(foodOrder);
+        foodOrder.setCustomer(this);
     }
 
-    public void removeFoodOrder(Order order) {
-        getOrders().remove(order);
-        order.setCustomer(null);
+    public void removeFoodOrder(FoodOrder foodOrder) {
+        getOrders().remove(foodOrder);
+        foodOrder.setCustomer(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

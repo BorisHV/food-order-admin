@@ -8,9 +8,9 @@
 
 
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>classfiles.FoodOrder</class>
     <class>classfiles.Courier</class>
     <class>classfiles.Restaurant</class>
-    <class>classfiles.Order</class>
     <class>classfiles.Customer</class>
     <class>classfiles.Dish</class>
 

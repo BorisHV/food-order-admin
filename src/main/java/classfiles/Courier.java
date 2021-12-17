@@ -20,7 +20,7 @@ public class Courier {
     private double wage;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "courier")
-    private List<Order> orders;
+    private List<FoodOrder> foodOrders;
 
     public Courier() {
     }
@@ -63,16 +63,25 @@ public class Courier {
         this.wage = wage;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public List<FoodOrder> getOrders() {
+        return foodOrders;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
     }
 
-    public void addOrder(Order order) {
-        getOrders().add(order);
-        order.setCourier(this);
+    public void addOrder(FoodOrder foodOrder) {
+        getOrders().add(foodOrder);
+        foodOrder.setCourier(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Courier{" +
+                "employeeId=" + employeeId +
+                ", courierName='" + courierName + '\'' +
+                ", deliveryType='" + deliveryType + '\'' +
+                ", wage=" + wage;
     }
 }

@@ -2,7 +2,7 @@ package management;
 
 import classfiles.Customer;
 import applicationContext.ApplicationContext;
-import classfiles.Order;
+import classfiles.FoodOrder;
 import dao.CustomerDao;
 import io.IOUtils;
 
@@ -16,10 +16,11 @@ public class CustomerManagement implements CustomerDao {
 
     public List<Customer> getAllCustomers() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Customer> query = em.createNamedQuery("Customer.getAllCustomers", Customer.class);
+        List<Customer> customers = em.createNamedQuery("Customer.getAllCustomers", Customer.class).getResultList();
+
         em.close();
 
-        return query.getResultList();
+        return customers;
     }
 
     public Customer findCustomerById() {
@@ -89,10 +90,10 @@ public class CustomerManagement implements CustomerDao {
 
         EntityManager em = emf.createEntityManager();
         Customer customer = em.find(Customer.class, customerId);
-        Order order = em.find(Order.class, orderId);
+        FoodOrder foodOrder = em.find(FoodOrder.class, orderId);
 
         em.getTransaction().begin();
-        customer.addOrder(order);
+        customer.addOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
     }

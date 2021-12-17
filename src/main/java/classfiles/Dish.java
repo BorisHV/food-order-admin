@@ -18,7 +18,7 @@ public class Dish {
     private Restaurant restaurant;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Order> orders;
+    private List<FoodOrder> foodOrders;
 
     public Dish() {
     }
@@ -60,25 +60,25 @@ public class Dish {
         this.restaurant = restaurant;
     }
 
-    public List<Order> getOrders() {
-        if (orders == null) {
-            orders = new ArrayList<>();
+    public List<FoodOrder> getOrders() {
+        if (foodOrders == null) {
+            foodOrders = new ArrayList<>();
         }
-        return orders;
+        return foodOrders;
     }
 
-    public void setFoodOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setFoodOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
     }
 
-    public void addFoodOrder(Order order) {
-        getOrders().add(order);
-        order.getDishes().add(this);
+    public void addFoodOrder(FoodOrder foodOrder) {
+        getOrders().add(foodOrder);
+        foodOrder.getDishes().add(this);
     }
 
-    public void removeFoodOrder(Order order) {
-        getOrders().remove(order);
-        order.getDishes().remove(this);
+    public void removeFoodOrder(FoodOrder foodOrder) {
+        getOrders().remove(foodOrder);
+        foodOrder.getDishes().remove(this);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class Dish {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", restaurant=" + restaurant +
-                ", orders=" + orders +
+                ", foodOrders=" + foodOrders +
                 '}';
     }
 
@@ -98,8 +98,8 @@ public class Dish {
         restaurant.getDishes().add(this);
     }
 
-    public void addOrder(Order order) {
-        getOrders().add(order);
-        order.getDishes().add(this);
+    public void addOrder(FoodOrder foodOrder) {
+        getOrders().add(foodOrder);
+        foodOrder.getDishes().add(this);
     }
 }

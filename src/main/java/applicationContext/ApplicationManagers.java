@@ -10,7 +10,7 @@ public class ApplicationManagers {
     private final CourierManagement COURIER_MANAGAMENT;
     private final CustomerManagement CUSTOMER_MANAGEMENT;
     private final DishManagement DISH_MANAGEMENT;
-    private final OrderManagement ORDER_MANAGEMENT;
+    private final FoodOrderManagement ORDER_MANAGEMENT;
     private final RestaurantManagement RESTAURANT_MANAGEMENT;
 
 
@@ -28,7 +28,7 @@ public class ApplicationManagers {
         COURIER_MANAGAMENT = new CourierManagement();
         CUSTOMER_MANAGEMENT = new CustomerManagement();
         DISH_MANAGEMENT = new DishManagement();
-        ORDER_MANAGEMENT = new OrderManagement();
+        ORDER_MANAGEMENT = new FoodOrderManagement();
         RESTAURANT_MANAGEMENT = new RestaurantManagement();
     }
 
@@ -44,7 +44,7 @@ public class ApplicationManagers {
         return DISH_MANAGEMENT;
     }
 
-    public OrderManagement getOrderManagement() {
+    public FoodOrderManagement getOrderManagement() {
         return ORDER_MANAGEMENT;
     }
 
