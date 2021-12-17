@@ -13,6 +13,7 @@ public interface CustomerDao {
     void removeCustomer();
     void updatePhoneNumber();
     void connectExistingCustomerToExistingOrder();
+    boolean checkCustomerId(int id);
 }
 
 

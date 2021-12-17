@@ -44,7 +44,7 @@ public class ApplicationManagers {
         return DISH_MANAGEMENT;
     }
 
-    public FoodOrderManagement getOrderManagement() {
+    public FoodOrderManagement getFoodOrderManagement() {
         return ORDER_MANAGEMENT;
     }
 

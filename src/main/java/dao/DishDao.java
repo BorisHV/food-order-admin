@@ -14,6 +14,7 @@ public interface DishDao {
     void updatePrice();
     void connectExistingDishToExistingRestaurant();
     void connectExistingDishToExistingFoodOrder();
+    boolean checkDishId(int id);
 }
 
 

@@ -13,6 +13,7 @@ public interface CourierDao {
     void removeCourier();
     void updateCourierWage();
     void connectExistingCourierToExistingFoodOrder();
+    boolean checkCourierId(int id);
 }
 
 

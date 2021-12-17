@@ -71,9 +71,13 @@ public class Courier {
         this.foodOrders = foodOrders;
     }
 
-    public void addOrder(FoodOrder foodOrder) {
+    public void addFoodOrder(FoodOrder foodOrder) {
         getOrders().add(foodOrder);
         foodOrder.setCourier(this);
+    }
+    public void removeFoodOrder(FoodOrder foodOrder){
+        foodOrders.remove(foodOrder);
+        foodOrder.setCourier(null);
     }
 
     @Override

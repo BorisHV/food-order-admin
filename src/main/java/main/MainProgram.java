@@ -11,6 +11,5 @@ public class MainProgram {
         RunMenu runMenu = new RunMenu();
 
         runMenu.runMainMenu();
-
     }
 }

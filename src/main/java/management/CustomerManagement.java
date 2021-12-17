@@ -1,5 +1,6 @@
 package management;
 
+import classfiles.Courier;
 import classfiles.Customer;
 import applicationContext.ApplicationContext;
 import classfiles.FoodOrder;
@@ -25,7 +26,7 @@ public class CustomerManagement implements CustomerDao {
 
     public Customer findCustomerById() {
         EntityManager em = emf.createEntityManager();
-        int id = ioUtils.askForId();
+        int id = ioUtils.askForCustomerId();
 
         Customer customer = em.find(Customer.class, id);
 
@@ -53,20 +54,26 @@ public class CustomerManagement implements CustomerDao {
     }
 
     public void removeCustomer() {
-        int id = ioUtils.askForId();
-        //TODO nulla
+        ioUtils.printAllCustomers();
         EntityManager em = emf.createEntityManager();
-        Customer customer = em.find(Customer.class, id);
+        int customerId = ioUtils.askForCustomerId();
 
         em.getTransaction().begin();
-        em.remove(customer);
-        em.getTransaction().commit();
+        TypedQuery<FoodOrder> query = em.createQuery("SELECT f FROM FoodOrder f", FoodOrder.class);
+        List<FoodOrder> foodorders = query.getResultList();
 
+        for (FoodOrder foodorder : foodorders) {
+            if(foodorder.getCustomer().getId() == customerId){
+                foodorder.setCustomer(null);
+            }
+        }
+        em.remove(em.find(Customer.class, customerId));
+        em.getTransaction().commit();
         em.close();
     }
 
     public void updatePhoneNumber() {
-        int id = ioUtils.askForId();
+        int id = ioUtils.askForCustomerId();
         String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
 
         EntityManager em = emf.createEntityManager();
@@ -83,10 +90,10 @@ public class CustomerManagement implements CustomerDao {
     public void connectExistingCustomerToExistingOrder() {
 
         ApplicationContext.getInstance().getIOUTILS().printAllCustomers();
-        int customerId = ioUtils.askForId();
+        int customerId = ioUtils.askForCustomerId();
 
         ApplicationContext.getInstance().getIOUTILS().printAllOrders();
-        int orderId = ioUtils.askForId();
+        int orderId = ioUtils.askForFoodOrderId();
 
         EntityManager em = emf.createEntityManager();
         Customer customer = em.find(Customer.class, customerId);
@@ -96,5 +103,15 @@ public class CustomerManagement implements CustomerDao {
         customer.addOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
+    }
+
+    public boolean checkCustomerId(int id) {
+        EntityManager em = emf.createEntityManager();
+        Customer customer = em.find(Customer.class, id);
+        if (customer == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

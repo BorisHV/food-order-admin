@@ -53,7 +53,7 @@ public class DishManagement implements DishDao {
     @Override
     public Dish findDishById() {
         EntityManager em = emf.createEntityManager();
-        int id = ioUtils.askForId();
+        int id = ioUtils.askForDishId();
 
         Dish dish = em.find(Dish.class, id);
 
@@ -63,7 +63,7 @@ public class DishManagement implements DishDao {
 
     @Override
     public void updatePrice() {
-        int id = ioUtils.askForId();
+        int id = ioUtils.askForDishId();
         double newPrice = ioUtils.askForPrice();
 
         EntityManager em = emf.createEntityManager();
@@ -80,10 +80,10 @@ public class DishManagement implements DishDao {
     public void connectExistingDishToExistingRestaurant() {
 
         ApplicationContext.getInstance().getIOUTILS().printAllDishes();
-        int dishId = ioUtils.askForId();
+        int dishId = ioUtils.askForDishId();
 
         ApplicationContext.getInstance().getIOUTILS().printAllRestaurants();
-        int restaurantId = ioUtils.askForId();
+        int restaurantId = ioUtils.askForRestaurantId();
 
 
         EntityManager em = emf.createEntityManager();
@@ -99,10 +99,10 @@ public class DishManagement implements DishDao {
     @Override
     public void connectExistingDishToExistingFoodOrder() {
         ApplicationContext.getInstance().getIOUTILS().printAllDishes();
-        int dishId = ioUtils.askForId();
+        int dishId = ioUtils.askForDishId();
 
         ApplicationContext.getInstance().getIOUTILS().printAllOrders();
-        int orderId = ioUtils.askForId();
+        int orderId = ioUtils.askForFoodOrderId();
 
         EntityManager em = emf.createEntityManager();
         Dish dish = em.find(Dish.class, dishId);
@@ -116,16 +116,50 @@ public class DishManagement implements DishDao {
 
     @Override
     public void removeDish() {
-        int id = ioUtils.askForId();
-
+        ioUtils.printAllDishes();
         EntityManager em = emf.createEntityManager();
+        int id = ioUtils.askForDishId();
 
         Dish dish = em.find(Dish.class, id);
-        //TODO remove from lists, restaurant dishes, order dishes
+        Restaurant restaurant = dish.getRestaurant();
+
         em.getTransaction().begin();
+
+        if(restaurant != null) {
+            List<Dish> dishes = restaurant.getDishes();
+
+            for (Dish dish2 : dishes
+            ) {
+                if (dish2.getId() == id) {
+                    dish2 = null;
+                }
+            }
+        }
+
+        List<FoodOrder> foodOrders = dish.getOrders();
+
+        for (FoodOrder foodOrder: foodOrders) {
+            for(Dish foodOrderDish : foodOrder.getDishes()){
+                if (dish.getId() == id){
+                    foodOrderDish = null;
+                }
+            }
+        }
+
+
         em.remove(dish);
         em.getTransaction().commit();
         em.close();
+    }
+
+    public boolean checkDishId(int id) {
+        EntityManager em = emf.createEntityManager();
+        Dish dish = em.find(Dish.class, id);
+        if (dish == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 

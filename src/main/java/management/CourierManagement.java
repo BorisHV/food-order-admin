@@ -7,6 +7,8 @@ import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CourierManagement implements CourierDao {
@@ -25,7 +27,7 @@ public class CourierManagement implements CourierDao {
 
     public Courier findCourierById() {
         EntityManager em = emf.createEntityManager();
-        int id = ioUtils.askForId();
+        int id = ioUtils.askForCourierId();
 
         Courier courier = em.find(Courier.class, id);
 
@@ -53,20 +55,28 @@ public class CourierManagement implements CourierDao {
     }
 
     public void removeCourier() {
+        ioUtils.printAllCouriers();
         EntityManager em = emf.createEntityManager();
-        int employeeId = ioUtils.askForId();
-
+        int courierId = ioUtils.askForCourierId();
+        //Vi vill nulla courier_employeeid i foodorder
         em.getTransaction().begin();
-        em.remove(em.find(Courier.class, employeeId));
-        em.getTransaction().commit();
+        TypedQuery<FoodOrder> query = em.createQuery("SELECT f FROM FoodOrder f", FoodOrder.class);
+        List<FoodOrder> foodorders = query.getResultList();
 
+        for (FoodOrder foodorder : foodorders) {
+            if(foodorder.getCourier().getEmployeeId() == courierId){
+                foodorder.setCourier(null);
+            }
+        }
+        em.remove(em.find(Courier.class, courierId));
+        em.getTransaction().commit();
         em.close();
     }
 
     public void updateCourierWage() {
         getAllCouriers();
 
-        int employeeId = ioUtils.askForId();
+        int employeeId = ioUtils.askForCourierId();
         double newWage = ioUtils.askForWage();
 
         EntityManager em = emf.createEntityManager();
@@ -81,19 +91,29 @@ public class CourierManagement implements CourierDao {
     @Override
     public void connectExistingCourierToExistingFoodOrder() {
         ApplicationContext.getInstance().getIOUTILS().printAllCouriers();
-        int courierId = ioUtils.askForId();
+        int courierId = ioUtils.askForCourierId();
 
         ApplicationContext.getInstance().getIOUTILS().printAllOrders();
-        int orderId = ioUtils.askForId();
+        int orderId = ioUtils.askForFoodOrderId();
 
         EntityManager em = emf.createEntityManager();
         Courier courier = em.find(Courier.class, courierId);
         FoodOrder foodOrder = em.find(FoodOrder.class, orderId);
 
         em.getTransaction().begin();
-        courier.addOrder(foodOrder);
+        courier.addFoodOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
 
+    }
+
+    public boolean checkCourierId(int id) {
+        EntityManager em = emf.createEntityManager();
+        Courier courier = em.find(Courier.class, id);
+        if (courier == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

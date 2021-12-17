@@ -19,7 +19,7 @@ public class FoodOrder {
     private int id;
     private double tip;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Courier courier;
     @ManyToOne
     private Customer customer;

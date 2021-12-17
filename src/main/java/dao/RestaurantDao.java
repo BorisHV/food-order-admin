@@ -13,6 +13,7 @@ public interface RestaurantDao {
     void removeRestaurant();
     void updateAdressById();
     void connectExistingRestaurantToExistingDish();
+    boolean checkRestaurantId(int id);
 }
 
 
