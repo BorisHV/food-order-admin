@@ -1,13 +1,13 @@
 package management;
 
-import classfiles.*;
 import applicationContext.ApplicationContext;
+import classfiles.Courier;
+import classfiles.FoodOrder;
 import dao.CourierDao;
 import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class CourierManagement implements CourierDao {
     public List<Courier> getAllCouriers() {
 
         EntityManager em = emf.createEntityManager();
-        List<Courier> couriers = em.createNamedQuery("Courier.showAllCouriers", Courier.class).getResultList();
+        List<Courier> couriers = em.createNamedQuery("Courier.findAllCouriers", Courier.class).getResultList();
 
         em.close();
         return couriers;
@@ -56,18 +56,21 @@ public class CourierManagement implements CourierDao {
 
     public void removeCourier() {
         ioUtils.printAllCouriers();
-        EntityManager em = emf.createEntityManager();
-        int courierId = ioUtils.askForCourierId();
-        //Vi vill nulla courier_employeeid i foodorder
-        em.getTransaction().begin();
-        TypedQuery<FoodOrder> query = em.createQuery("SELECT f FROM FoodOrder f", FoodOrder.class);
-        List<FoodOrder> foodorders = query.getResultList();
 
-        for (FoodOrder foodorder : foodorders) {
-            if(foodorder.getCourier().getEmployeeId() == courierId){
+        EntityManager em = emf.createEntityManager();
+
+        int courierId = ioUtils.askForCourierId();
+
+        em.getTransaction().begin();
+        TypedQuery<FoodOrder> query = em.createNamedQuery("FoodOrder.findAllFoodOrdersThatAreNotNull", FoodOrder.class);
+        List<FoodOrder> foodOrders = query.getResultList();
+
+        for (FoodOrder foodorder : foodOrders) {
+            if (foodorder.getCourier().getEmployeeId() == courierId) {
                 foodorder.setCourier(null);
             }
         }
+
         em.remove(em.find(Courier.class, courierId));
         em.getTransaction().commit();
         em.close();
@@ -104,16 +107,25 @@ public class CourierManagement implements CourierDao {
         courier.addFoodOrder(foodOrder);
         em.getTransaction().commit();
         em.close();
-
     }
 
     public boolean checkCourierId(int id) {
         EntityManager em = emf.createEntityManager();
         Courier courier = em.find(Courier.class, id);
-        if (courier == null) {
-            return false;
-        } else {
-            return true;
+        return courier != null;
+    }
+
+    public double getAverageCourierWage() {
+        double wageSum = 0;
+        int numberOfCouriers = 0;
+
+        List<Courier> couriers = getAllCouriers();
+
+        for (Courier courier : couriers) {
+            wageSum += courier.getWage();
+            numberOfCouriers++;
         }
+
+        return wageSum / numberOfCouriers;
     }
 }

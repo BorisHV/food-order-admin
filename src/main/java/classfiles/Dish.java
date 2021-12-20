@@ -1,9 +1,14 @@
 package classfiles;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
+@NamedQueries(
+        {
+                @NamedQuery(name = "Dish.findAllDishes", query = "SELECT dish FROM Dish dish")
+        }
+)
 
 @Entity
 public class Dish {

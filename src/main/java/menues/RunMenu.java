@@ -3,12 +3,8 @@ package menues;
 import io.IOUtils;
 import management.*;
 
-
-import javax.persistence.EntityManagerFactory;
-
 public class RunMenu {
 
-    EntityManagerFactory emf;
     IOUtils ioUtils = new IOUtils();
 
     CourierManagement courierManagement = new CourierManagement();
@@ -17,21 +13,12 @@ public class RunMenu {
     CustomerManagement customerManagement = new CustomerManagement();
     FoodOrderManagement orderManagement = new FoodOrderManagement();
 
-    public void printMainMenu() {
-        System.out.println("1. Restaurant menu");
-        System.out.println("2. Courier menu");
-        System.out.println("3. Dish menu");
-        System.out.println("4. Customer menu");
-        System.out.println("5. Food Order menu");
-        System.out.println("0. Exit\n");
-    }
-
     public void runMainMenu() {
 
         boolean isRunning = true;
 
         while (isRunning) {
-            printMainMenu();
+            ioUtils.printMainMenu();
 
             int menuOption = ioUtils.readInt();
             switch (menuOption) {
@@ -40,6 +27,7 @@ public class RunMenu {
                 case 3 -> runDishMenu();
                 case 4 -> runCustomerMenu();
                 case 5 -> runOrderMenu();
+                case 6 -> runStatisticsMenu();
                 case 0 -> {
                     System.out.println("Exiting program...");
                     isRunning = false;
@@ -49,24 +37,12 @@ public class RunMenu {
         }
     }
 
-    public void printOrderMenu() {
-        System.out.println("1. Show all food orders");
-        System.out.println("2. Create and add order");
-        System.out.println("3. Remove order");
-        System.out.println("4. Update tip");
-        System.out.println("5. Find order by id");
-        System.out.println("6. Connect existing food order to existing dish");
-        System.out.println("7. Connect existing food order to existing courier");
-        System.out.println("8. Connect existing food order to existing customer");
-        System.out.println("0. Return to main menu\n");
-    }
-
     private void runOrderMenu() {
 
         boolean isRunning = true;
 
         while (isRunning) {
-            printOrderMenu();
+            ioUtils.printOrderMenu();
 
             int menuOption = ioUtils.readInt();
 
@@ -162,10 +138,28 @@ public class RunMenu {
 
                 case 1 -> ioUtils.printAllRestaurants();
                 case 2 -> restaurantManagement.addRestaurant(restaurantManagement.createRestaurant());
-                case 3 -> restaurantManagement.updateAdressById();
+                case 3 -> restaurantManagement.updateAddressById();
                 case 4 -> restaurantManagement.removeRestaurant();
                 case 5 -> ioUtils.printRestaurantById();
                 case 6 -> restaurantManagement.connectExistingRestaurantToExistingDish();
+                case 0 -> isRunning = false;
+                default -> System.out.println("Option " + choice + " is not implemented.");
+            }
+        }
+    }
+
+    public void runStatisticsMenu() {
+        boolean isRunning = true;
+        while (isRunning) {
+            ioUtils.printStatisticsMenu();
+
+            int choice = ioUtils.readInt();
+
+            switch (choice) {
+                case 1 -> ioUtils.printAverageWage();
+                case 2 -> ioUtils.printMaxPrice(dishManagement.getMaxPrice());
+                case 3 -> ioUtils.printMostPopularDish();
+                case 4 -> ioUtils.printRestaurantNamesInAscOrder();
                 case 0 -> isRunning = false;
                 default -> System.out.println("Option " + choice + " is not implemented.");
             }

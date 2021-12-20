@@ -1,14 +1,16 @@
 package management;
 
 import applicationContext.ApplicationContext;
-import classfiles.Customer;
 import classfiles.Dish;
-import classfiles.FoodOrder;
 import classfiles.Restaurant;
 import dao.RestaurantDao;
 import io.IOUtils;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RestaurantManagement implements RestaurantDao {
@@ -28,6 +30,8 @@ public class RestaurantManagement implements RestaurantDao {
 
     @Override
     public Restaurant findRestaurantById() {
+        ioUtils.printAllRestaurants();
+
         EntityManager em = emf.createEntityManager();
         int id = ioUtils.askForRestaurantId();
 
@@ -43,8 +47,8 @@ public class RestaurantManagement implements RestaurantDao {
 
         String name = ioUtils.askForName();
         restaurant.setRestaurantName(name);
-        String adress = ioUtils.askForAddress();
-        restaurant.setAdress(adress);
+        String address = ioUtils.askForAddress();
+        restaurant.setAdress(address);
         String category = ioUtils.askForCategory();
         restaurant.setCategory(category);
 
@@ -72,7 +76,7 @@ public class RestaurantManagement implements RestaurantDao {
         List<Dish> dishes = query.getResultList();
 
         for (Dish dish : dishes) {
-            if(dish.getRestaurant().getId() == restaurantsId){
+            if (dish.getRestaurant().getId() == restaurantsId) {
                 dish.setRestaurant(null);
             }
         }
@@ -82,27 +86,28 @@ public class RestaurantManagement implements RestaurantDao {
 
     }
 
-    public void updateAdressById() {
+    public void updateAddressById() {
         EntityManager em = emf.createEntityManager();
 
         int restaurantId = ioUtils.askForRestaurantId();
         Restaurant restaurant = em.find(Restaurant.class, restaurantId);
         if (restaurant != null) {
-            String adress = ioUtils.askForAddress();
+            String address = ioUtils.askForAddress();
             em.getTransaction().begin();
-            restaurant.setAdress(adress);
+            restaurant.setAdress(address);
             em.getTransaction().commit();
             em.close();
         } else {
             System.out.println("There is no restaurant with id : " + restaurantId);
         }
     }
-    public void connectExistingRestaurantToExistingDish(){
+
+    public void connectExistingRestaurantToExistingDish() {
 
         ioUtils.printAllRestaurants();
         int restaurantId = ioUtils.askForRestaurantId();
 
-       ioUtils.printAllDishes();
+        ioUtils.printAllDishes();
         int dishId = ioUtils.askForDishId();
 
         EntityManager em = emf.createEntityManager();
@@ -118,10 +123,18 @@ public class RestaurantManagement implements RestaurantDao {
     public boolean checkRestaurantId(int id) {
         EntityManager em = emf.createEntityManager();
         Restaurant restaurant = em.find(Restaurant.class, id);
-        if (restaurant == null) {
-            return false;
-        } else {
-            return true;
+        return restaurant != null;
+    }
+
+    public List<String> sortRestaurantNameAsc() {
+        List<Restaurant> restaurants = getAllRestaurants();
+        List<String> restaurantNames = new ArrayList<>();
+
+        for (Restaurant restaurant : restaurants) {
+            restaurantNames.add(restaurant.getRestaurantName().toLowerCase());
         }
+
+        Collections.sort(restaurantNames);
+        return restaurantNames;
     }
 }

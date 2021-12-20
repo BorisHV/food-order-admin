@@ -1,13 +1,15 @@
 package management;
 
 import applicationContext.ApplicationContext;
-import classfiles.*;
+import classfiles.Courier;
+import classfiles.Customer;
+import classfiles.Dish;
+import classfiles.FoodOrder;
 import dao.FoodOrderDao;
 import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class FoodOrderManagement implements FoodOrderDao {
@@ -42,8 +44,7 @@ public class FoodOrderManagement implements FoodOrderDao {
 
         double tip = ioUtils.askForTip();
 
-        FoodOrder foodOrder = new FoodOrder(tip);
-        return foodOrder;
+        return new FoodOrder(tip);
 
     }
 
@@ -68,7 +69,6 @@ public class FoodOrderManagement implements FoodOrderDao {
         FoodOrder foodOrder = em.find(FoodOrder.class, id);
 
         em.getTransaction().begin();
-
         Courier courier = foodOrder.getCourier();
 
         if (courier != null) {
@@ -115,6 +115,7 @@ public class FoodOrderManagement implements FoodOrderDao {
 
     @Override
     public void updateTip() {
+        ioUtils.printAllOrders();
 
         int id = ioUtils.askForFoodOrderId();
         // TODO change name of method!!!!
@@ -188,10 +189,6 @@ public class FoodOrderManagement implements FoodOrderDao {
     public boolean checkFoodOrderId(int id) {
         EntityManager em = emf.createEntityManager();
         FoodOrder foodOrder = em.find(FoodOrder.class, id);
-        if (foodOrder == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return foodOrder != null;
     }
 }

@@ -1,8 +1,7 @@
 package management;
 
-import java.util.List;
-
 import applicationContext.ApplicationContext;
+import applicationContext.ApplicationManagers;
 import classfiles.Dish;
 import classfiles.FoodOrder;
 import classfiles.Restaurant;
@@ -11,6 +10,11 @@ import io.IOUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 
 public class DishManagement implements DishDao {
@@ -22,7 +26,7 @@ public class DishManagement implements DishDao {
     public List<Dish> getAllDishes() {
         EntityManager em = emf.createEntityManager();
 
-        List<Dish> allDishes = em.createQuery("SELECT dish FROM Dish dish", Dish.class)
+        List<Dish> allDishes = em.createNamedQuery("Dish.findAllDishes", Dish.class)
                 .getResultList();
 
         em.close();
@@ -35,8 +39,7 @@ public class DishManagement implements DishDao {
         String name = ioUtils.askForName();
         double price = ioUtils.askForPrice();
 
-        Dish dish = new Dish(name, price);
-        return dish;
+        return new Dish(name, price);
     }
 
     public void addDish(Dish dish) {
@@ -52,6 +55,8 @@ public class DishManagement implements DishDao {
 
     @Override
     public Dish findDishById() {
+        ioUtils.printAllDishes();
+
         EntityManager em = emf.createEntityManager();
         int id = ioUtils.askForDishId();
 
@@ -63,6 +68,8 @@ public class DishManagement implements DishDao {
 
     @Override
     public void updatePrice() {
+        ioUtils.printAllDishes();
+
         int id = ioUtils.askForDishId();
         double newPrice = ioUtils.askForPrice();
 
@@ -125,7 +132,7 @@ public class DishManagement implements DishDao {
 
         em.getTransaction().begin();
 
-        if(restaurant != null) {
+        if (restaurant != null) {
             List<Dish> dishes = restaurant.getDishes();
 
             for (Dish dish2 : dishes
@@ -138,14 +145,13 @@ public class DishManagement implements DishDao {
 
         List<FoodOrder> foodOrders = dish.getOrders();
 
-        for (FoodOrder foodOrder: foodOrders) {
-            for(Dish foodOrderDish : foodOrder.getDishes()){
-                if (dish.getId() == id){
+        for (FoodOrder foodOrder : foodOrders) {
+            for (Dish foodOrderDish : foodOrder.getDishes()) {
+                if (dish.getId() == id) {
                     foodOrderDish = null;
                 }
             }
         }
-
 
         em.remove(dish);
         em.getTransaction().commit();
@@ -155,11 +161,41 @@ public class DishManagement implements DishDao {
     public boolean checkDishId(int id) {
         EntityManager em = emf.createEntityManager();
         Dish dish = em.find(Dish.class, id);
-        if (dish == null) {
-            return false;
-        } else {
-            return true;
+        return dish != null;
+    }
+
+    public String getMostPopularDish() {
+        List<FoodOrder> orders = ApplicationManagers.getInstance().getFoodOrderManagement().getAllOrders();
+        List<Dish> allOrderedDishes = new ArrayList<>();
+        List<String> namesOfAllOrderedDishes = new ArrayList<>();
+
+        for (FoodOrder order : orders) allOrderedDishes.addAll(order.getDishes());
+        for (Dish dish : allOrderedDishes) namesOfAllOrderedDishes.add(dish.getName());
+
+        String mostCommonDish = "";
+        int countMostCommonDish = 0;
+
+        for (int i = 0; i < namesOfAllOrderedDishes.size(); i++) {
+            int count = Collections.frequency(namesOfAllOrderedDishes, namesOfAllOrderedDishes.get(i));
+
+            if (count > countMostCommonDish) {
+                countMostCommonDish = count;
+                mostCommonDish = namesOfAllOrderedDishes.get(i);
+            }
         }
+
+        return mostCommonDish;
+    }
+
+    public Optional<Double> getMaxPrice() {
+        EntityManager em = emf.createEntityManager();
+
+        Stream<Dish> allDishes = em.createNamedQuery("Dish.findAllDishes", Dish.class)
+                .getResultStream();
+
+        return allDishes
+                .map(Dish::getPrice)
+                .max(Double::compareTo);
     }
 }
 

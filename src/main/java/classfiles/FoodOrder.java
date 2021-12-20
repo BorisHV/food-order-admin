@@ -1,13 +1,15 @@
 package classfiles;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 @NamedQueries(
         {
                 @NamedQuery(name = "Order.getAllOrders", query = "SELECT o FROM FoodOrder o"),
-                @NamedQuery(name = "Order.findOrderById", query = "SELECT o FROM FoodOrder o")
+                @NamedQuery(name = "Order.findOrderById", query = "SELECT o FROM FoodOrder o"),
+                @NamedQuery(name = "FoodOrder.findAllFoodOrdersThatAreNotNull",
+                        query = "SELECT f FROM FoodOrder f WHERE f.courier IS NOT NULL")
         }
 )
 

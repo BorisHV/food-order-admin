@@ -1,8 +1,8 @@
 package classfiles;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 @NamedQueries(
         {
@@ -82,7 +82,7 @@ public class Restaurant {
         return "Restaurant{" +
                 "id=" + id +
                 ", restaurantName='" + restaurantName + '\'' +
-                ", adress='" + adress + '\'' +
+                ", address='" + adress + '\'' +
                 ", category='" + category;
     }
 }

@@ -1,11 +1,11 @@
 package classfiles;
 
-import java.util.List;
 import javax.persistence.*;
+import java.util.List;
 
 @NamedQueries(
         {
-                @NamedQuery(name = "Courier.showAllCouriers", query = "SELECT c FROM Courier c")
+                @NamedQuery(name = "Courier.findAllCouriers", query = "SELECT c FROM Courier c")
         }
 )
 
@@ -35,10 +35,6 @@ public class Courier {
         this.employeeId = employeeId;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
     public String getCourierName() {
         return courierName;
     }
@@ -53,6 +49,18 @@ public class Courier {
 
     public void setDeliveryType(String deliveryType) {
         this.deliveryType = deliveryType;
+    }
+
+    public List<FoodOrder> getFoodOrders() {
+        return foodOrders;
+    }
+
+    public void setFoodOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
     public double getWage() {
@@ -75,7 +83,8 @@ public class Courier {
         getOrders().add(foodOrder);
         foodOrder.setCourier(this);
     }
-    public void removeFoodOrder(FoodOrder foodOrder){
+
+    public void removeFoodOrder(FoodOrder foodOrder) {
         foodOrders.remove(foodOrder);
         foodOrder.setCourier(null);
     }

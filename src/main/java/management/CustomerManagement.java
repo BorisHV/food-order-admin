@@ -1,13 +1,14 @@
 package management;
 
-import classfiles.Courier;
-import classfiles.Customer;
 import applicationContext.ApplicationContext;
+import classfiles.Customer;
 import classfiles.FoodOrder;
 import dao.CustomerDao;
 import io.IOUtils;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CustomerManagement implements CustomerDao {
@@ -39,8 +40,7 @@ public class CustomerManagement implements CustomerDao {
         String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
         String address = ioUtils.askForAddress();
 
-        Customer customer = new Customer(name, phoneNumber, address);
-        return customer;
+        return new Customer(name, phoneNumber, address);
     }
 
     public void addCustomer(Customer customer) {
@@ -60,10 +60,10 @@ public class CustomerManagement implements CustomerDao {
 
         em.getTransaction().begin();
         TypedQuery<FoodOrder> query = em.createQuery("SELECT f FROM FoodOrder f", FoodOrder.class);
-        List<FoodOrder> foodorders = query.getResultList();
+        List<FoodOrder> foodOrders = query.getResultList();
 
-        for (FoodOrder foodorder : foodorders) {
-            if(foodorder.getCustomer().getId() == customerId){
+        for (FoodOrder foodorder : foodOrders) {
+            if (foodorder.getCustomer().getId() == customerId) {
                 foodorder.setCustomer(null);
             }
         }
@@ -73,6 +73,8 @@ public class CustomerManagement implements CustomerDao {
     }
 
     public void updatePhoneNumber() {
+        ioUtils.printAllCustomers();
+
         int id = ioUtils.askForCustomerId();
         String phoneNumber = ioUtils.askForCustomerTelephoneNumber();
 
@@ -86,7 +88,6 @@ public class CustomerManagement implements CustomerDao {
         em.close();
     }
 
-    @Override
     public void connectExistingCustomerToExistingOrder() {
 
         ApplicationContext.getInstance().getIOUTILS().printAllCustomers();
@@ -108,10 +109,6 @@ public class CustomerManagement implements CustomerDao {
     public boolean checkCustomerId(int id) {
         EntityManager em = emf.createEntityManager();
         Customer customer = em.find(Customer.class, id);
-        if (customer == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return customer != null;
     }
 }
